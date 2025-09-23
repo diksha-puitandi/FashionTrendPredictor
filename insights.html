@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dataset Insights - Fashion Forecaster</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style> 
+        /* Add this to your existing style.css file */
+
+.insights-container {
+    padding: 60px 5%;
+    display: flex;
+    justify-content: center;
+}
+
+.insights-content {
+    max-width: 900px;
+    width: 100%;
+}
+
+.insights-content h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.insights-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    text-align: center;
+    color: #555;
+    margin-bottom: 40px;
+}
+
+.charts-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.charts-section h2 {
+    width: 100%;
+    text-align: center;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+
+.chart-placeholder {
+    background-color: var(--card-bg);
+    border: 2px dashed #ccc;
+    border-radius: 10px;
+    padding: 40px 20px;
+    width: 300px;
+    text-align: center;
+    color: #999;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.chart-placeholder i {
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+.statistics-summary {
+    background-color: var(--light-bg);
+    border-left: 5px solid var(--secondary-color);
+    padding: 30px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.statistics-summary h2 {
+    color: var(--primary-color);
+    margin-top: 0;
+}
+
+.statistics-summary ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 20px;
+}
+
+.statistics-summary ul li {
+    background: var(--white);
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+    /* --- Dropdown Menu Styles --- */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--white);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    right: 0;
+    top: 100%;
+    border-radius: 5px;
+}
+
+.dropdown-content a {
+    color: var(--primary-color);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    font-weight: 500;
+}
+
+.dropdown-content a:hover {
+    background-color: var(--light-bg);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+    </style>
+</head>
+<body>
+
+     <header>
+        <header>
+    <nav class="navbar">
+        <div class="logo">Fashion Trend Predictor</div>
+        <ul class="nav-links">
+            <a href="log in.html">Log In</a>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="predict.html">Predict Trend</a></li>
+            <li><a href="insights.html">Dataset Insights</a></li>
+            <li class="dropdown">
+                <a href="#" class="dropbtn">More <i class="fas fa-caret-down"></i></a>
+                <div class="dropdown-content">
+                    <a href="about.html">About</a>
+                    <a href="contact.html">Contact</a>
+                    <a href="blog.html">Blog</a>
+                    
+                    
+                </div>
+            </li>
+        </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="insights-container">
+            <div class="insights-content">
+                <h1>Data Statistics & Visualizations</h1>
+                <p>Explore the data that powers our fashion trend predictions. Here, you'll find key statistics, charts, and graphs to help you understand the dataset better.</p>
+
+                <div class="charts-section">
+                    <h2>Key Data Visuals</h2>
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-bar fa-5x"></i>
+                        <p>Your charts will appear here. You can use libraries like Chart.js, D3.js, or Plotly.js to display your data.</p>
+                    </div>
+
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-pie fa-5x"></i>
+                        <p>Add different types of charts to represent various data points, such as trends over time or category breakdowns.</p>
+                    </div>
+
+                    <div class="chart-placeholder">
+                        <i class="fas fa-chart-line fa-5x"></i>
+                        <p>Feel free to embed interactive visualizations here to make the data more engaging for your users.</p>
+                    </div>
+                </div>
+
+                <div class="statistics-summary">
+                    <h2>Dataset Summary</h2>
+                    <p>
+                        The dataset includes thousands of entries with features like season, color, material, and target audience, meticulously
+                        curated to provide the most accurate trend predictions.
+                    </p>
+                    <ul>
+                        <li>Total Entries: **1,200+**</li>
+                        <li>Features Included: **11**</li>
+                        <li>Time Period: **2020-2025**</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Fashion Forecaster. All rights reserved.</p>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+        </div>
+    </footer>
+
+</body>
+</html>

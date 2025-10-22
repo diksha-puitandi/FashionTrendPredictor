@@ -660,7 +660,7 @@ $conn->close();
                         <button type="submit" class="cta-button">Log In</button>
                         <div class="form-links">
                             <a href="#">Forgot Password?</a>
-                            <a href="#" onclick="showForm('signup')">Don't have an account? Sign up</a>
+                            <a href="regis.php">Don't have an account? Sign up</a>
                         </div>
                     </form>
                 </div>

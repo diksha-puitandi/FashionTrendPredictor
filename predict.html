@@ -300,6 +300,44 @@ footer {
     cursor: pointer;
 }
 
+/* Form Buttons Container */
+.form-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.form-buttons .cta-button,
+.form-buttons .reset-button {
+    flex: 1;
+    padding: 15px;
+    font-size: 1.1rem;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.reset-button {
+    background-color: #95a5a6;
+    color: var(--white);
+}
+
+.reset-button:hover {
+    background-color: #7f8c8d;
+    transform: translateY(-2px);
+}
+
+/* Chart Container */
+.chart-container {
+    margin-top: 30px;
+    padding: 20px;
+    background-color: var(--white);
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+}
+
 /* About Page Styles */
 .about-section {
     padding: 60px 5%;
@@ -599,19 +637,121 @@ footer {
         <section class="form-container">
             <div class="form-card">
                 <h1>Predict Fashion Trend</h1>
-                <p class="form-description">Enter the item and material to see its popularity trend as a graph.</p>
+                <p class="form-description">Fill in the details below to predict the fashion trend popularity based on various factors.</p>
 
                 <form id="predictionForm" class="login-form">
                     <div class="form-group">
-                        <label for="item">Item:</label>
-                        <input type="text" id="item" name="item" placeholder="e.g., Shirt" required>
+                        <label for="age">Age:</label>
+                        <select id="age" name="age" required>
+                            <option value="">Select Age Group</option>
+                            <option value="under_18">Under 18</option>
+                            <option value="18_to_25">18 to 25</option>
+                            <option value="25_to_30">25 to 30</option>
+                            <option value="31_and_above">31 and above</option>
+                        </select>
                     </div>
+
                     <div class="form-group">
-                        <label for="material">Material:</label>
-                        <input type="text" id="material" name="material" placeholder="e.g., Cotton, Denim" required>
+                        <label for="season_weather">Season & Weather Suitability:</label>
+                        <select id="season_weather" name="season_weather" required>
+                            <option value="">Select Season & Weather</option>
+                            <option value="spring_warm">Spring and Warm</option>
+                            <option value="summer_hot">Summer and Hot</option>
+                            <option value="fall_mild">Fall and Mild</option>
+                            <option value="winter_cold">Winter and Cold</option>
+                            <option value="all_seasons">All Seasons</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="target_audience">Target Audience:</label>
+                        <select id="target_audience" name="target_audience" required>
+                            <option value="">Select Target Audience</option>
+                            <option value="men">Men</option>
+                            <option value="women">Women</option>
+                            <option value="unisex">Unisex</option>
+                            <option value="kids">Kids</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="category_fit">Category & Fit:</label>
+                        <select id="category_fit" name="category_fit" required>
+                            <option value="">Select Category & Fit</option>
+                            <option value="tops_loose">Tops and Loose</option>
+                            <option value="tops_fitted">Tops and Fitted</option>
+                            <option value="bottoms_flare">Bottoms and Flare</option>
+                            <option value="bottoms_straight">Bottoms and Straight</option>
+                            <option value="dresses_bodycon">Dresses and Bodycon</option>
+                            <option value="dresses_aline">Dresses and A-line</option>
+                            <option value="others">Others</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="material_fabric">Material / Fabric Type:</label>
+                        <select id="material_fabric" name="material_fabric" required>
+                            <option value="">Select Material / Fabric</option>
+                            <option value="cotton">Cotton</option>
+                            <option value="denim">Denim</option>
+                            <option value="silk">Silk</option>
+                            <option value="leather">Leather</option>
+                            <option value="synthetic">Synthetic</option>
+                            <option value="others">Others</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cultural_trend">Cultural or Trend Influence:</label>
+                        <select id="cultural_trend" name="cultural_trend" required>
+                            <option value="">Select Cultural or Trend Influence</option>
+                            <option value="kpop">K-pop</option>
+                            <option value="y2k">Y2K</option>
+                            <option value="vintage">Vintage</option>
+                            <option value="boho">Boho</option>
+                            <option value="streetwear">Streetwear</option>
+                            <option value="minimalist">Minimalist</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="color_pattern">Color & Pattern Type:</label>
+                        <input type="text" id="color_pattern" name="color_pattern" placeholder="ex: Pastel Purple, Floral or Black, solid" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="boldness">Boldness & Emotional Impact:</label>
+                        <input type="number" id="boldness" name="boldness" min="1" max="10" placeholder="Rate from 1 to 10" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="celebrity_promotion">Was it Promoted by Celebrity or Influencer?:</label>
+                        <select id="celebrity_promotion" name="celebrity_promotion" required>
+                            <option value="">Select Option</option>
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                            <option value="not_sure">Not Sure</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="first_seen">Where Did You First See This?:</label>
+                        <select id="first_seen" name="first_seen" required>
+                            <option value="">Select Source</option>
+                            <option value="instagram_tiktok">Instagram/TikTok</option>
+                            <option value="fashion_show">Fashion Show</option>
+                            <option value="online_store">Online Store</option>
+                            <option value="street_style">Street Style</option>
+                            <option value="tv_magazine">TV/Magazine</option>
+                            <option value="other">Other</option>
+                        </select>
                     </div>
                     
-                    <button type="submit" class="cta-button">Predict Trend</button>
+                    <div class="form-buttons">
+                        <button type="submit" class="cta-button">Predict Trend</button>
+                        <button type="button" class="reset-button" onclick="resetForm()">Reset</button>
+                    </div>
                 </form>
                 
                 <div class="chart-container">
@@ -631,59 +771,114 @@ footer {
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.getElementById('predictionForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const item = document.getElementById('item').value;
-            const material = document.getElementById('material').value;
+  <script>
+document.getElementById('predictionForm').addEventListener('submit', function(e) {
+    e.preventDefault();
 
-            console.log(`Sending to backend: Item: ${item}, Material: ${material}`);
+    // Collect all form data
+    const formData = new FormData();
+    formData.append('age', document.getElementById('age').value);
+    formData.append('season_weather', document.getElementById('season_weather').value);
+    formData.append('target_audience', document.getElementById('target_audience').value);
+    formData.append('category_fit', document.getElementById('category_fit').value);
+    formData.append('material_fabric', document.getElementById('material_fabric').value);
+    formData.append('cultural_trend', document.getElementById('cultural_trend').value);
+    formData.append('color_pattern', document.getElementById('color_pattern').value);
+    formData.append('boldness', document.getElementById('boldness').value);
+    formData.append('celebrity_promotion', document.getElementById('celebrity_promotion').value);
+    formData.append('first_seen', document.getElementById('first_seen').value);
 
-            // This is mock data for the example. You will replace this with a call to your backend.
-            const mockData = {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-                values: [50, 65, 80, 75, 90, 85]
-            };
-            
-            drawChart(mockData.labels, mockData.values, item);
-        });
+    // Show loading state
+    const submitBtn = document.querySelector('.cta-button');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Predicting...';
+    submitBtn.disabled = true;
 
-        function drawChart(labels, values, item) {
-            const ctx = document.getElementById('trendChart').getContext('2d');
-            
-            if (window.myChart instanceof Chart) {
-                window.myChart.destroy();
-            }
+    fetch('predict.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            alert('Error: ' + data.error);
+            return;
+        }
 
-            window.myChart = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: `Popularity Trend for ${item}`,
-                        data: values,
-                        borderColor: 'rgb(52, 152, 219)',
-                        backgroundColor: 'rgba(52, 152, 219, 0.2)',
-                        tension: 0.3,
-                        pointBackgroundColor: 'rgb(243, 156, 18)',
-                        fill: true
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            max: 100,
-                            title: {
-                                display: true,
-                                text: 'Popularity Score'
-                            }
-                        }
+        // Ensure your ML API returns trend_series.labels and trend_series.values
+        const labels = data.trend_series?.labels || ['Jan','Feb','Mar','Apr','May','Jun'];
+        const values = data.trend_series?.values || [50, 65, 80, 75, 90, 85];
+
+        drawChart(labels, values, 'Fashion Trend');
+    })
+    .catch(err => {
+        console.error(err);
+        alert('Failed to fetch prediction.');
+    })
+    .finally(() => {
+        // Reset button state
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    });
+});
+
+function resetForm() {
+    const form = document.getElementById('predictionForm');
+    form.reset();
+    
+    // Clear chart if exists
+    if (window.myChart instanceof Chart) {
+        window.myChart.destroy();
+    }
+    
+    // Clear chart container
+    const chartContainer = document.querySelector('.chart-container');
+    chartContainer.innerHTML = '<canvas id="trendChart"></canvas>';
+}
+
+function drawChart(labels, values, title) {
+    const ctx = document.getElementById('trendChart').getContext('2d');
+
+    if (window.myChart instanceof Chart) {
+        window.myChart.destroy();
+    }
+
+    window.myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: `Popularity Trend for ${title}`,
+                data: values,
+                borderColor: 'rgb(52, 152, 219)',
+                backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                tension: 0.3,
+                pointBackgroundColor: 'rgb(243, 156, 18)',
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    max: 100,
+                    title: {
+                        display: true,
+                        text: 'Popularity Score'
                     }
                 }
-            });
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            }
         }
-    </script>
+    });
+}
+</script>
+
 </body>
 </html>

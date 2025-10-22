@@ -15,8 +15,8 @@ if (!isset($_SESSION['username'])) {
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-<style>
-    :root {
+    <style>
+        :root {
     --primary-color: #2c3e50; /* A dark, professional blue */
     --secondary-color: #3498db; /* A vibrant, eye-catching blue */
     --accent-color: #f39c12; /* A warm orange for contrast */
@@ -558,7 +558,8 @@ footer {
 .form-links a:hover {
     color: var(--accent-color);
 }
-</style>
+    </style>
+
 </head>
 <body>
 

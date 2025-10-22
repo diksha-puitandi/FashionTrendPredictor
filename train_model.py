@@ -157,74 +157,86 @@ except Exception as e:
         X_encoded, y, test_size=0.2, random_state=42, stratify=y
     )
 
-# ✅ MODEL OPTIMIZATION - Test multiple algorithms with better parameters
+# ✅ MODEL OPTIMIZATION - Focus on best performing models with strong regularization
 print("\n=== MODEL OPTIMIZATION ===")
 
 # Compute class weights for imbalanced data
 class_weights = compute_class_weight('balanced', classes=np.unique(y), y=y)
 class_weight_dict = dict(zip(np.unique(y), class_weights))
 
+# Focus on best performing models with strong regularization to prevent overfitting
 models = {
-    'Random Forest': RandomForestClassifier(
+    'Random Forest (Regularized)': RandomForestClassifier(
+        random_state=42, 
+        n_estimators=200, 
+        max_depth=8, 
+        min_samples_split=10, 
+        min_samples_leaf=4,
+        class_weight='balanced',
+        max_features='sqrt',
+        max_samples=0.8,
+        bootstrap=True
+    ),
+    'Gradient Boosting (Regularized)': GradientBoostingClassifier(
+        random_state=42, 
+        n_estimators=150, 
+        learning_rate=0.05, 
+        max_depth=4,
+        subsample=0.8,
+        min_samples_split=10,
+        min_samples_leaf=4
+    ),
+    'Random Forest (Conservative)': RandomForestClassifier(
         random_state=42, 
         n_estimators=100, 
-        max_depth=10, 
-        min_samples_split=5, 
-        min_samples_leaf=2,
+        max_depth=5, 
+        min_samples_split=20, 
+        min_samples_leaf=8,
         class_weight='balanced',
-        max_features='sqrt'
-    ),
-    'Gradient Boosting': GradientBoostingClassifier(
-        random_state=42, 
-        n_estimators=100, 
-        learning_rate=0.1, 
-        max_depth=5,
-        subsample=0.8
-    ),
-    'Logistic Regression': LogisticRegression(
-        random_state=42, 
-        max_iter=2000, 
-        C=1.0,
-        class_weight='balanced'
-    ),
-    'SVM': SVC(
-        random_state=42, 
-        C=1.0, 
-        kernel='rbf',
-        class_weight='balanced',
-        probability=True
-    ),
-    'KNN': KNeighborsClassifier(
-        n_neighbors=5,
-        weights='distance'
-    ),
-    'Naive Bayes': GaussianNB()
+        max_features='log2'
+    )
 }
 
 best_model = None
 best_accuracy = 0
 best_model_name = ""
 
-print("Testing different algorithms...")
+print("Testing different algorithms with overfitting detection...")
 for name, model in models.items():
     # Train model
     model.fit(X_train, y_train)
     
-    # Test model
+    # Training predictions
+    y_train_pred = model.predict(X_train)
+    train_accuracy = accuracy_score(y_train, y_train_pred)
+    
+    # Test predictions
     y_pred = model.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
+    test_accuracy = accuracy_score(y_test, y_pred)
+    
+    # Calculate overfitting gap
+    overfitting_gap = train_accuracy - test_accuracy
     
     # Cross-validation
     cv_scores = cross_val_score(model, X_train, y_train, cv=5)
     
     print(f"{name}:")
-    print(f"  Test Accuracy: {accuracy:.4f}")
+    print(f"  Training Accuracy: {train_accuracy:.4f}")
+    print(f"  Test Accuracy: {test_accuracy:.4f}")
+    print(f"  Overfitting Gap: {overfitting_gap:.4f}")
     print(f"  CV Mean: {cv_scores.mean():.4f} (+/- {cv_scores.std() * 2:.4f})")
     
-    if accuracy > best_accuracy:
-        best_accuracy = accuracy
+    # Choose model with best test accuracy and reasonable overfitting gap
+    if test_accuracy > best_accuracy and overfitting_gap < 0.15:
+        best_accuracy = test_accuracy
         best_model = model
         best_model_name = name
+        print(f"  ✅ New best model (low overfitting)")
+    elif test_accuracy > best_accuracy:
+        best_accuracy = test_accuracy
+        best_model = model
+        best_model_name = name
+        print(f"  ⚠️ New best model (some overfitting)")
 
 print(f"\nBest model: {best_model_name} with accuracy: {best_accuracy:.4f}")
 
@@ -274,38 +286,81 @@ if param_grid:
     print(f"Best parameters: {grid_search.best_params_}")
     print(f"Best CV score: {grid_search.best_score_:.4f}")
 
-# ✅ ENSEMBLE METHODS
-print(f"\n=== ENSEMBLE METHODS ===")
+# ✅ OVERFITTING DETECTION AND GENERALIZATION
+print(f"\n=== OVERFITTING DETECTION AND GENERALIZATION ===")
 
-# Create ensemble models
-ensemble_models = {
-    'Voting Classifier': VotingClassifier([
-        ('rf', RandomForestClassifier(random_state=42, n_estimators=50, max_depth=10)),
-        ('gb', GradientBoostingClassifier(random_state=42, n_estimators=50, learning_rate=0.1)),
-        ('lr', LogisticRegression(random_state=42, max_iter=1000, C=1.0)),
-        ('knn', KNeighborsClassifier(n_neighbors=5))
-    ], voting='soft'),
-    
-    'Bagging Classifier': BaggingClassifier(
-        estimator=DecisionTreeClassifier(max_depth=5),
-        n_estimators=50,
-        random_state=42
-    )
-}
+# Check if the best model is overfitting
+best_model.fit(X_train, y_train)
+y_train_pred_best = best_model.predict(X_train)
+train_accuracy_best = accuracy_score(y_train, y_train_pred_best)
+y_test_pred_best = best_model.predict(X_test)
+test_accuracy_best = accuracy_score(y_test, y_test_pred_best)
+overfitting_gap_best = train_accuracy_best - test_accuracy_best
 
-# Test ensemble methods
-for name, model in ensemble_models.items():
-    model.fit(X_train, y_train)
-    y_pred_ensemble = model.predict(X_test)
-    accuracy_ensemble = accuracy_score(y_test, y_pred_ensemble)
+print(f"Best model overfitting analysis:")
+print(f"  Training Accuracy: {train_accuracy_best:.4f}")
+print(f"  Test Accuracy: {test_accuracy_best:.4f}")
+print(f"  Overfitting Gap: {overfitting_gap_best:.4f}")
+
+if overfitting_gap_best > 0.15:
+    print("⚠️ HIGH OVERFITTING DETECTED! Applying aggressive generalization techniques...")
     
-    print(f"{name}: Test Accuracy = {accuracy_ensemble:.4f}")
+    # Try multiple conservative models to find the best balance
+    conservative_models = {
+        'Very Conservative RF': RandomForestClassifier(
+            random_state=42, n_estimators=30, max_depth=2, min_samples_split=50, 
+            min_samples_leaf=25, class_weight='balanced', max_features='sqrt'
+        ),
+        'Conservative RF': RandomForestClassifier(
+            random_state=42, n_estimators=50, max_depth=3, min_samples_split=30, 
+            min_samples_leaf=15, class_weight='balanced', max_features='sqrt'
+        ),
+        'Balanced RF': RandomForestClassifier(
+            random_state=42, n_estimators=100, max_depth=4, min_samples_split=20, 
+            min_samples_leaf=10, class_weight='balanced', max_features='sqrt'
+        )
+    }
     
-    if accuracy_ensemble > best_accuracy:
-        best_accuracy = accuracy_ensemble
-        best_model = model
-        best_model_name = name
-        print(f"New best model: {name}")
+    best_generalized_model = None
+    best_generalized_accuracy = 0
+    best_generalized_name = ""
+    best_generalized_gap = 1.0
+    
+    for name, model in conservative_models.items():
+        model.fit(X_train, y_train)
+        y_train_pred_cons = model.predict(X_train)
+        train_accuracy_cons = accuracy_score(y_train, y_train_pred_cons)
+        y_test_pred_cons = model.predict(X_test)
+        test_accuracy_cons = accuracy_score(y_test, y_test_pred_cons)
+        overfitting_gap_cons = train_accuracy_cons - test_accuracy_cons
+        
+        print(f"{name}:")
+        print(f"  Training Accuracy: {train_accuracy_cons:.4f}")
+        print(f"  Test Accuracy: {test_accuracy_cons:.4f}")
+        print(f"  Overfitting Gap: {overfitting_gap_cons:.4f}")
+        
+        # Choose model with best test accuracy and low overfitting
+        if (test_accuracy_cons > best_generalized_accuracy and overfitting_gap_cons < 0.2) or \
+           (overfitting_gap_cons < best_generalized_gap and test_accuracy_cons > best_generalized_accuracy * 0.8):
+            best_generalized_model = model
+            best_generalized_accuracy = test_accuracy_cons
+            best_generalized_name = name
+            best_generalized_gap = overfitting_gap_cons
+            print(f"  ✅ New best generalized model")
+    
+    # Use the best generalized model if it's significantly better
+    if best_generalized_accuracy > test_accuracy_best * 0.85 and best_generalized_gap < overfitting_gap_best:
+        best_model = best_generalized_model
+        best_model_name = best_generalized_name
+        best_accuracy = best_generalized_accuracy
+        print(f"✅ Using {best_generalized_name} for better generalization")
+    else:
+        print("✅ Keeping original best model despite overfitting")
+        
+elif overfitting_gap_best > 0.05:
+    print("⚠️ MILD OVERFITTING DETECTED - Model is acceptable")
+else:
+    print("✅ NO SIGNIFICANT OVERFITTING - Model is well generalized")
 
 # ✅ FINAL MODEL EVALUATION
 print("\n=== FINAL MODEL EVALUATION ===")

@@ -317,6 +317,7 @@ require_once 'session_check.php';
                         <a href="index.php#contact">Contact</a>
                     </div>
                 </li>
+                <li><a href="profile.php">Profile</a></li>
                 <li><a href="logout.php">Logout</a></li>
             </ul>
         </nav>

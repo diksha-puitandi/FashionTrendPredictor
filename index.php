@@ -55,11 +55,11 @@ body {
     z-index: 1000;
 }
 
-        .navbar .logo {
+.navbar .logo {
             font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary-color);
-        }
+    font-weight: 700;
+    color: var(--primary-color);
+}
 
         .navbar .logo a {
             text-decoration: none;
@@ -1312,10 +1312,11 @@ footer {
                     </div>
                 </li>
                 <?php if (isset($_SESSION['username']) && isset($_SESSION['user_id'])): ?>
-        <li><a href="logout.php">Logout</a></li>
-    <?php else: ?>
-                    <li><a href="login.php">Login</a></li>
-    <?php endif; ?>
+                <li><a href="profile.php">Profile</a></li>
+                <li><a href="logout.php">Logout</a></li>
+            <?php else: ?>
+                <li><a href="login.php">Login</a></li>
+            <?php endif; ?>
             </ul>
         </nav>
     </header>

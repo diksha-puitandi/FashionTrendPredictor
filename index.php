@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+// Prevent caching of pages with session data
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
 if (!isset($_SESSION['username'])) {
     header("Location: login.php");
     exit;
@@ -74,7 +80,7 @@ body {
     padding: 10px 20px;
     border-radius: 5px;
     transition: all 0.2s ease;
-    display: block;
+    display: block; 
 }
 
 .nav-links a:hover {
@@ -94,16 +100,38 @@ body {
     display: inline-block;
 }
 
+.dropdown .dropbtn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    font-weight: 600;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+}
+
+.dropdown .dropbtn:hover {
+    color: var(--secondary-color);
+    background-color: #f8f9fa;
+}
+
 .dropdown-content {
     display: none;
     position: absolute;
     background-color: var(--white);
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 100;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 1000;
     top: 100%;
-    right: 0;
-    border-radius: 5px;
+    left: 0;
+    margin-top: 5px;
+    border: 1px solid #e0e0e0;
 }
 
 .dropdown-content a {
@@ -111,16 +139,25 @@ body {
     padding: 12px 16px;
     text-decoration: none;
     display: block; 
-    font-weight: 500;
+    transition: all 0.2s ease;
+    border-radius: 0;
+    margin: 0;
 }
 
 .dropdown-content a:hover {
-    background-color: var(--light-bg);
+    background-color: #f8f9fa;
+    color: var(--secondary-color);
 }
 
 .dropdown:hover .dropdown-content {
     display: block;
 }
+
+.dropdown:hover .dropbtn {
+    color: var(--secondary-color);
+    background-color: #f8f9fa;
+}
+
 
 /* Hero Section */
 .hero-section {
@@ -1153,6 +1190,19 @@ footer {
         gap: 40px;
     }
     
+    .dropdown-content {
+        position: static;
+        display: none;
+        width: 100%;
+        box-shadow: none;
+        border: 1px solid #e0e0e0;
+        margin-top: 10px;
+    }
+    
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    
     .cta-buttons {
         flex-direction: column;
         align-items: center;
@@ -1190,6 +1240,46 @@ footer {
 }
     </style>
 
+    <script>
+        // Smooth scrolling for anchor links
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('a[href^="#"]');
+            
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        });
+
+        // Prevent back button issues and ensure proper logout
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted) {
+                // Page was loaded from cache, reload to ensure fresh state
+                window.location.reload();
+            }
+        });
+
+        // Clear any cached data and prevent back navigation to logged-in state
+        if (window.history && window.history.pushState) {
+            window.history.pushState(null, null, window.location.href);
+            window.addEventListener('popstate', function(event) {
+                // If user tries to go back, redirect to login
+                window.location.href = 'login.php';
+            });
+        }
+    </script>
+
 </head>
 <body>
 
@@ -1202,11 +1292,19 @@ footer {
                 <li><a href="index.php" class="active">Home</a></li>
                 <li><a href="predict.html">Predict Trend</a></li>
                 <li><a href="insights.html">Dataset Insights</a></li>
-                <?php if (isset($_SESSION['username'])): ?>
-                    <li><a href="logout.php">Logout</a></li>
-                <?php else: ?>
+                <li class="dropdown">
+                    <a href="#" class="dropbtn">More <i class="fas fa-caret-down"></i></a>
+                    <div class="dropdown-content">
+                        <a href="#about">About</a>
+                        <a href="#blog">Blog</a>
+                        <a href="#contact">Contact</a>
+                    </div>
+                </li>
+                         <?php if (isset($_SESSION['username'])): ?>
+        <li><a href="logout.php">Logout</a></li>
+    <?php else: ?>
                     <li><a href="login.php">Login</a></li>
-                <?php endif; ?>
+    <?php endif; ?>
             </ul>
         </nav>
     </header>
@@ -1246,7 +1344,7 @@ footer {
                         <div class="fashion-item item-4">👖</div>
                     </div>
                 </div>
-            </div>
+                </div>
         </section>
 
         <!-- Fashion Analysis Info Section -->
@@ -1284,21 +1382,21 @@ footer {
             <div class="container">
                 <h2 class="section-title">Why Choose Our Platform</h2>
                 <div class="features-grid">
-                    <div class="feature-card">
+            <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-chart-line"></i>
                         </div>
                         <h3>Data-Driven Insights</h3>
                         <p>Our predictions are powered by comprehensive analysis of market data, consumer behavior, and fashion industry trends.</p>
-                    </div>
-                    <div class="feature-card">
+            </div>
+            <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-magic"></i>
                         </div>
                         <h3>Intuitive Interface</h3>
                         <p>A simple and elegant design makes it easy for anyone to get accurate trend predictions without technical knowledge.</p>
-                    </div>
-                    <div class="feature-card">
+            </div>
+            <div class="feature-card">
                         <div class="feature-icon">
                             <i class="fas fa-lightbulb"></i>
                         </div>
@@ -1331,7 +1429,7 @@ footer {
         </section>
 
         <!-- About Section -->
-        <section class="about-section">
+        <section id="about" class="about-section">
             <div class="container">
                 <h2 class="section-title">About Fashion Predictor</h2>
                 <div class="about-content">
@@ -1358,7 +1456,7 @@ footer {
         </section>
 
         <!-- Blog Section -->
-        <section class="blog-section">
+        <section id="blog" class="blog-section">
             <div class="container">
                 <h2 class="section-title">Latest Fashion Insights</h2>
                 <div class="blog-grid">
@@ -1397,7 +1495,7 @@ footer {
         </section>
 
         <!-- Contact Section -->
-        <section class="contact-section">
+        <section id="contact" class="contact-section">
             <div class="container">
                 <h2 class="section-title">Get In Touch</h2>
                 <div class="contact-content">

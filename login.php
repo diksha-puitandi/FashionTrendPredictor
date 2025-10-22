@@ -1,6 +1,17 @@
 <?php
 session_start();
 
+// Check if user is already logged in
+if (isset($_SESSION['username'])) {
+    header("Location: index.php");
+    exit;
+}
+
+// Prevent caching of the login page
+header("Cache-Control: no-cache, no-store, must-revalidate");
+header("Pragma: no-cache");
+header("Expires: 0");
+
 // Database connection
 $host = "localhost";
 $user = "root";
@@ -687,6 +698,22 @@ $conn->close();
             loginForm.style.display = 'none';
             signupForm.style.display = 'block';
         }
+    }
+
+    // Prevent back button issues
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            // Page was loaded from cache, reload to ensure fresh state
+            window.location.reload();
+        }
+    });
+
+    // Clear any cached data
+    if (window.history && window.history.pushState) {
+        window.history.pushState(null, null, window.location.href);
+        window.addEventListener('popstate', function(event) {
+            window.history.pushState(null, null, window.location.href);
+        });
     }
     </script>
 </body>

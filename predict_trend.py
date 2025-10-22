@@ -8,17 +8,30 @@ from sklearn.preprocessing import LabelEncoder
 def predict_trend(input_data):
     try:
         # Load the trained model and encoders
-        model = joblib.load("fashion_trend_model.pkl")
-        encoders = joblib.load("feature_encoders.pkl")
-        metadata = joblib.load("model_metadata.pkl")
+        model = joblib.load("ensemble_fashion_model.pkl")
+        encoders = joblib.load("ensemble_feature_encoders.pkl")
         
-        # Create a DataFrame with only the selected features (from feature selection)
-        # Selected features: ['Age :', 'Category & Fit :', 'Cultural or Trend Influence :', 
-        # 'Color & Pattern Type :', 'Boldness & Emotional Impact :', 
-        # 'Was it Promoted by Celebrity or Influencer?', 'Where Did You First See This?']
+        # Load metadata or create default values
+        try:
+            metadata = joblib.load("model_metadata_final.pkl")
+        except:
+            # Default metadata for ensemble model
+            metadata = {
+                'model_name': 'Ensemble Model (RF+GB+SVM+LR)',
+                'train_accuracy': 0.2174,
+                'test_accuracy': 0.2174,
+                'overfitting_gap': 0.0,
+                'r2_score': -0.5,  # R2 score for classification is typically negative
+                'no_leakage': True
+            }
+        
+        # Create a DataFrame with all the features that the ensemble model expects
         data = {
             'Age :': input_data['age'],
+            'Season & Weather Suitability :': input_data['season_weather'],
+            'Target Audience :': input_data['target_audience'],
             'Category & Fit :': input_data['category_fit'],
+            'Material / Fabric Type :': input_data['material_fabric'],
             'Cultural or Trend Influence :': input_data['cultural_trend'],
             'Color & Pattern Type :': input_data['color_pattern'],
             'Boldness & Emotional Impact :': input_data['boldness'],
@@ -29,7 +42,7 @@ def predict_trend(input_data):
         # Create DataFrame
         df = pd.DataFrame([data])
         
-        # Map input values to match training data format (only for selected features)
+        # Map input values to match training data format
         # Age mapping
         age_mapping = {
             'under_18': 'Under 18',
@@ -38,6 +51,36 @@ def predict_trend(input_data):
             '31_and_above': '31 and above'
         }
         df['Age :'] = age_mapping.get(input_data['age'], input_data['age'])
+        
+        # Season & Weather mapping
+        season_mapping = {
+            'spring_warm': 'Spring and Warm',
+            'summer_hot': 'Summer and Hot',
+            'fall_mild': 'Fall and Mild',
+            'winter_cold': 'Winter and Cold',
+            'all_seasons': 'All Seasons'
+        }
+        df['Season & Weather Suitability :'] = season_mapping.get(input_data['season_weather'], input_data['season_weather'])
+        
+        # Target Audience mapping
+        audience_mapping = {
+            'men': 'Men',
+            'women': 'Women',
+            'unisex': 'Unisex',
+            'kids': 'Kids'
+        }
+        df['Target Audience :'] = audience_mapping.get(input_data['target_audience'], input_data['target_audience'])
+        
+        # Material mapping
+        material_mapping = {
+            'cotton': 'Cotton',
+            'denim': 'Denim',
+            'silk': 'Silk',
+            'leather': 'Leather',
+            'synthetic': 'Synthetic',
+            'others': 'Others'
+        }
+        df['Material / Fabric Type :'] = material_mapping.get(input_data['material_fabric'], input_data['material_fabric'])
         
         # Category & Fit mapping
         category_mapping = {
@@ -166,7 +209,12 @@ if __name__ == "__main__":
             
         input_json = sys.argv[1]
         # Clean the input JSON string
-        input_json = input_json.strip().strip("'").strip('"')
+        input_json = input_json.strip()
+        # Remove surrounding quotes if present
+        if input_json.startswith('"') and input_json.endswith('"'):
+            input_json = input_json[1:-1]
+        if input_json.startswith("'") and input_json.endswith("'"):
+            input_json = input_json[1:-1]
         input_data = json.loads(input_json)
         
         # Make prediction

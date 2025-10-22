@@ -12,13 +12,13 @@ def predict_trend(input_data):
         encoders = joblib.load("feature_encoders.pkl")
         metadata = joblib.load("model_metadata.pkl")
         
-        # Create a DataFrame with the input data
+        # Create a DataFrame with only the selected features (from feature selection)
+        # Selected features: ['Age :', 'Category & Fit :', 'Cultural or Trend Influence :', 
+        # 'Color & Pattern Type :', 'Boldness & Emotional Impact :', 
+        # 'Was it Promoted by Celebrity or Influencer?', 'Where Did You First See This?']
         data = {
             'Age :': input_data['age'],
-            'Season & Weather Suitability :': input_data['season_weather'],
-            'Target Audience :': input_data['target_audience'],
             'Category & Fit :': input_data['category_fit'],
-            'Material / Fabric Type :': input_data['material_fabric'],
             'Cultural or Trend Influence :': input_data['cultural_trend'],
             'Color & Pattern Type :': input_data['color_pattern'],
             'Boldness & Emotional Impact :': input_data['boldness'],
@@ -29,7 +29,7 @@ def predict_trend(input_data):
         # Create DataFrame
         df = pd.DataFrame([data])
         
-        # Map input values to match training data format
+        # Map input values to match training data format (only for selected features)
         # Age mapping
         age_mapping = {
             'under_18': 'Under 18',
@@ -38,25 +38,6 @@ def predict_trend(input_data):
             '31_and_above': '31 and above'
         }
         df['Age :'] = age_mapping.get(input_data['age'], input_data['age'])
-        
-        # Season mapping
-        season_mapping = {
-            'spring_and_warm': 'Spring and warm',
-            'summer_and_hot': 'Summer and hot',
-            'fall_and_mild': 'Fall and mild',
-            'winter_and_cold': 'Winter and cold',
-            'all_seasons': 'All seasons'
-        }
-        df['Season & Weather Suitability :'] = season_mapping.get(input_data['season_weather'], input_data['season_weather'])
-        
-        # Target Audience mapping
-        audience_mapping = {
-            'men': 'Men',
-            'women': 'Women',
-            'unisex': 'Unisex',
-            'kids': 'Kids'
-        }
-        df['Target Audience :'] = audience_mapping.get(input_data['target_audience'], input_data['target_audience'])
         
         # Category & Fit mapping
         category_mapping = {
@@ -69,17 +50,6 @@ def predict_trend(input_data):
             'others': 'Others'
         }
         df['Category & Fit :'] = category_mapping.get(input_data['category_fit'], input_data['category_fit'])
-        
-        # Material mapping
-        material_mapping = {
-            'cotton': 'Cotton',
-            'denim': 'Denim',
-            'silk': 'Silk',
-            'leather': 'Leather',
-            'synthetic': 'Synthetic',
-            'others': 'Others'
-        }
-        df['Material / Fabric Type :'] = material_mapping.get(input_data['material_fabric'], input_data['material_fabric'])
         
         # Cultural trend mapping
         cultural_mapping = {

@@ -40,23 +40,18 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(135deg, var(--white) 0%, #f8f9fa 100%);
+    background-color: var(--white);
     padding: 1rem 5%;
-    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     position: sticky;
     top: 0;
     z-index: 1000;
-    backdrop-filter: blur(10px);
 }
 
 .navbar .logo {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--primary-color);
-    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
 }
 
 .nav-links {
@@ -65,45 +60,32 @@ body {
     margin: 0;
     padding: 0;
     align-items: center;
+    gap: 10px;
 }
 
 .nav-links li {
-    margin-left: 30px;
-    position: relative;
+    margin: 0;
 }
 
 .nav-links a {
     text-decoration: none;
     color: var(--primary-color);
     font-weight: 600;
-    padding: 8px 16px;
-    border-radius: 25px;
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+    display: block;
 }
 
-.nav-links a::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(52, 152, 219, 0.1), transparent);
-    transition: left 0.5s;
+.nav-links a:hover {
+    color: var(--secondary-color);
+    background-color: #f8f9fa;
 }
 
-.nav-links a:hover::before {
-    left: 100%;
-}
-
-.nav-links a:hover,
 .nav-links a.active {
     color: var(--secondary-color);
-    background: linear-gradient(135deg, rgba(52, 152, 219, 0.1), rgba(52, 152, 219, 0.05));
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(52, 152, 219, 0.2);
+    background-color: rgba(52, 152, 219, 0.1);
+    border-bottom: 2px solid var(--secondary-color);
 }
 
 /* Dropdown Menu Styles */
@@ -374,15 +356,20 @@ body {
 }
 
 .features-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
     margin-top: 50px;
+    overflow-x: auto;
+    padding: 10px 0;
 }
 
 .feature-card {
+    flex: 0 0 280px;
+    min-width: 280px;
     background: var(--white);
-    padding: 40px 30px;
+    padding: 30px 20px;
     border-radius: 15px;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
     text-align: center;
@@ -501,6 +488,223 @@ body {
     background: white;
     color: var(--primary-color);
     transform: translateY(-3px);
+}
+
+/* About Section */
+.about-section {
+    padding: 80px 0;
+    background: var(--white);
+}
+
+.about-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 60px;
+    align-items: center;
+}
+
+.about-text p {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.about-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.stat-card {
+    text-align: center;
+    padding: 30px 20px;
+    background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+    color: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(52, 152, 219, 0.3);
+}
+
+.stat-card h3 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.stat-card p {
+    font-size: 1rem;
+    margin: 0;
+    opacity: 0.9;
+}
+
+/* Blog Section */
+.blog-section {
+    padding: 80px 0;
+    background: var(--light-bg);
+}
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+}
+
+.blog-card {
+    background: var(--white);
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.blog-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+.blog-image {
+    height: 200px;
+    background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.blog-image i {
+    font-size: 3rem;
+    color: white;
+}
+
+.blog-content {
+    padding: 30px;
+}
+
+.blog-content h3 {
+    font-size: 1.4rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.blog-content p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.read-more {
+    color: var(--secondary-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.read-more:hover {
+    color: var(--accent-color);
+}
+
+/* Contact Section */
+.contact-section {
+    padding: 80px 0;
+    background: var(--white);
+}
+
+.contact-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    margin-top: 50px;
+}
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 20px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+}
+
+.contact-item:hover {
+    transform: translateX(10px);
+}
+
+.contact-item i {
+    font-size: 2rem;
+    color: var(--secondary-color);
+    width: 50px;
+    text-align: center;
+}
+
+.contact-item h3 {
+    font-size: 1.2rem;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+}
+
+.contact-item p {
+    color: #666;
+    margin: 0;
+}
+
+.contact-form-container {
+    background: #f8f9fa;
+    padding: 40px;
+    border-radius: 15px;
+}
+
+.contact-form .form-group {
+    margin-bottom: 25px;
+}
+
+.contact-form label {
+    display: block;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+}
+
+.submit-btn {
+    background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
 }
 
 /* Footer */
@@ -876,15 +1080,11 @@ footer {
     }
     
     .nav-links {
-        gap: 15px;
-    }
-    
-    .nav-links li {
-        margin-left: 15px;
+        gap: 5px;
     }
     
     .nav-links a {
-        padding: 6px 12px;
+        padding: 8px 12px;
         font-size: 0.9rem;
     }
     
@@ -918,10 +1118,39 @@ footer {
         font-size: 2rem;
     }
     
-    .analysis-grid,
-    .features-grid {
+    .analysis-grid {
         grid-template-columns: 1fr;
         gap: 20px;
+    }
+    
+    .features-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .feature-card {
+        flex: none;
+        width: 100%;
+        max-width: 400px;
+    }
+    
+    .about-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+    
+    .about-stats {
+        flex-direction: row;
+        justify-content: center;
+    }
+    
+    .blog-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .contact-content {
+        grid-template-columns: 1fr;
+        gap: 40px;
     }
     
     .cta-buttons {
@@ -966,30 +1195,18 @@ footer {
 
     <header>
         <nav class="navbar">
-            <div class="logo">Fashion Forecaster</div>
+            <div class="logo">Fashion Predictor</div>
             <ul class="nav-links">
             <!-- <a href="log in.html">Log In</a> -->
 
                 <li><a href="index.php" class="active">Home</a></li>
                 <li><a href="predict.html">Predict Trend</a></li>
                 <li><a href="insights.html">Dataset Insights</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropbtn">More <i class="fas fa-caret-down"></i></a>
-                    <div class="dropdown-content">
-                        <a href="about.html">About</a>
-                        <a href="contact.html">Contact</a>
-                        <a href="blog.html">Blog</a>
-
-                         <?php if (isset($_SESSION['username'])): ?>
-        <!-- User is logged in -->
-        <li><a href="logout.php">Logout</a></li>
-    <?php else: ?>
-        <!-- User is NOT logged in -->
-        <li><a href="#" class="active" onclick="showForm('login')">Log In / Sign Up</a></li>
-    <?php endif; ?>
-                        <!-- <a href="login.html">Log In</a> -->
-                    </div>
-                </li>
+                <?php if (isset($_SESSION['username'])): ?>
+                    <li><a href="logout.php">Logout</a></li>
+                <?php else: ?>
+                    <li><a href="login.php">Login</a></li>
+                <?php endif; ?>
             </ul>
         </nav>
     </header>
@@ -1108,6 +1325,115 @@ footer {
                         </div>
                         <h3>Celebrity Influence</h3>
                         <p>Factor in celebrity endorsements and influencer impact on fashion trends for more accurate predictions.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about-section">
+            <div class="container">
+                <h2 class="section-title">About Fashion Predictor</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Fashion Predictor is a cutting-edge platform that leverages advanced machine learning algorithms to forecast fashion trends with unprecedented accuracy. Our mission is to democratize fashion forecasting by making AI-powered predictions accessible to everyone.</p>
+                        <p>We combine data science expertise with deep fashion industry knowledge to provide insights that help designers, retailers, and fashion enthusiasts stay ahead of the curve. Our ensemble model analyzes multiple factors including demographics, cultural influences, seasonal patterns, and celebrity endorsements to deliver reliable trend predictions.</p>
+                    </div>
+                    <div class="about-stats">
+                        <div class="stat-card">
+                            <h3>21.74%</h3>
+                            <p>Prediction Accuracy</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>115+</h3>
+                            <p>Data Points Analyzed</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3>9</h3>
+                            <p>Key Factors Considered</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Blog Section -->
+        <section class="blog-section">
+            <div class="container">
+                <h2 class="section-title">Latest Fashion Insights</h2>
+                <div class="blog-grid">
+                    <article class="blog-card">
+                        <div class="blog-image">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="blog-content">
+                            <h3>Understanding Fashion Trend Prediction</h3>
+                            <p>Learn how machine learning algorithms analyze fashion data to predict upcoming trends and what factors influence consumer preferences.</p>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </article>
+                    <article class="blog-card">
+                        <div class="blog-image">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <div class="blog-content">
+                            <h3>Color Trends in 2025</h3>
+                            <p>Discover the most popular colors predicted for 2025 and how cultural influences shape color preferences in fashion.</p>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </article>
+                    <article class="blog-card">
+                        <div class="blog-image">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="blog-content">
+                            <h3>Demographics and Fashion Choices</h3>
+                            <p>Explore how age groups, cultural backgrounds, and social influences impact fashion trend adoption and popularity.</p>
+                            <a href="#" class="read-more">Read More</a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact-section">
+            <div class="container">
+                <h2 class="section-title">Get In Touch</h2>
+                <div class="contact-content">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <h3>Email Us</h3>
+                            <p>info@fashionpredictor.com</p>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <h3>Call Us</h3>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <h3>Visit Us</h3>
+                            <p>123 Fashion Street, Style City</p>
+                        </div>
+                    </div>
+                    <div class="contact-form-container">
+                        <form class="contact-form" id="contactForm" method="POST" action="contact_submit.php">
+                            <div class="form-group">
+                                <label for="name">Name</label>
+                                <input type="text" id="name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message">Message</label>
+                                <textarea id="message" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="submit-btn">Send Message</button>
+                        </form>
                     </div>
                 </div>
             </div>

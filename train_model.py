@@ -10,7 +10,7 @@ from sklearn.ensemble import VotingClassifier
 import joblib
 
 # =========================
-# 1️⃣ LOAD AND PREPARE DATA
+# 1️⃣ LOAD AND PREPARE DATA   
 # =========================
 data = pd.read_csv("fashion_trends_prediction_optimized.csv")
 

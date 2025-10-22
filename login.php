@@ -609,35 +609,6 @@ $conn->close();
 
 <body>
 
-    <header>
-        <nav class="navbar">
-            <div class="logo">Fashion Forecaster</div>
-            <ul class="nav-links">
-                <li><a href="index.php">Home</a></li>
-                <li><a href="predict.html">Predict Trend</a></li>
-                <li><a href="insights.html">Dataset Insights</a></li>
-                <li class="dropdown">
-                    <a href="#" class="dropbtn">More <i class="fas fa-caret-down"></i></a>
-                    <div class="dropdown-content">
-                        <a href="about.html">About</a>
-                        <a href="contact.html">Contact</a>
-                        <a href="blog.html">Blog</a>
-
-                     <?php if (isset($_SESSION['username'])): ?>
-        <!-- User is logged in -->
-        <li><a href="logout.php">Logout</a></li>
-    <?php else: ?>
-        <!-- User is NOT logged in -->
-        <li><a href="#" class="active" onclick="showForm('login')">Log In / Sign Up</a></li>
-    <?php endif; ?>
-
-                        <!-- <a href="#" class="active" onclick="showForm('login')">Log In / Sign Up</a> -->
-
-                    </div>
-                </li>
-            </ul>
-        </nav>
-    </header>
 
     <main>
         <section class="login-section">

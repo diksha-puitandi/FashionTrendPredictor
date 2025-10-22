@@ -73,11 +73,19 @@ print(f"\nSample Estimated Years values:")
 print(data[['category', 'Estimated Years']].head(10))
 
 # ✅ Continue with model training
-print("\n=== TRAINING MODEL ===")
+print("\n=== TRAINING MODEL (WITHOUT DATA LEAKAGE) ===")
 
-# Drop irrelevant columns (keep the new engineered features)
+# Drop irrelevant columns AND engineered features that cause data leakage
 columns_to_drop = ["Timestamp", "Full Name :", "Email Id :"]
 data_clean = data.drop(columns_to_drop, axis=1)
+
+# Remove engineered features that cause data leakage
+if 'category' in data_clean.columns:
+    data_clean = data_clean.drop('category', axis=1)
+    print("Removed 'category' feature (data leakage)")
+if 'Estimated Years' in data_clean.columns:
+    data_clean = data_clean.drop('Estimated Years', axis=1)
+    print("Removed 'Estimated Years' feature (data leakage)")
 
 # Separate features and target
 X = data_clean.drop("Estimated Popularity (Now or Soon)", axis=1)
@@ -109,11 +117,11 @@ print(f"Testing set: {X_test.shape[0]} samples")
 print("\n=== MODEL OPTIMIZATION ===")
 
 models = {
-    'Decision Tree': DecisionTreeClassifier(random_state=42),
-    'Random Forest': RandomForestClassifier(random_state=42, n_estimators=100),
-    'Gradient Boosting': GradientBoostingClassifier(random_state=42),
-    'Logistic Regression': LogisticRegression(random_state=42, max_iter=1000),
-    'SVM': SVC(random_state=42)
+    'Decision Tree': DecisionTreeClassifier(random_state=42, max_depth=5, min_samples_split=10, min_samples_leaf=5),
+    'Random Forest': RandomForestClassifier(random_state=42, n_estimators=50, max_depth=5, min_samples_split=5, min_samples_leaf=2),
+    'Gradient Boosting': GradientBoostingClassifier(random_state=42, n_estimators=50, learning_rate=0.1, max_depth=3),
+    'Logistic Regression': LogisticRegression(random_state=42, max_iter=1000, C=0.1),
+    'SVM': SVC(random_state=42, C=0.1, kernel='rbf')
 }
 
 best_model = None
@@ -187,6 +195,10 @@ print("\n=== FINAL MODEL EVALUATION ===")
 # Train final model
 best_model.fit(X_train, y_train)
 
+# Training predictions
+y_train_pred = best_model.predict(X_train)
+train_accuracy = accuracy_score(y_train, y_train_pred)
+
 # Test predictions
 y_pred = best_model.predict(X_test)
 y_pred_proba = best_model.predict_proba(X_test) if hasattr(best_model, 'predict_proba') else None
@@ -194,9 +206,20 @@ y_pred_proba = best_model.predict_proba(X_test) if hasattr(best_model, 'predict_
 # Calculate metrics
 test_accuracy = accuracy_score(y_test, y_pred)
 r2 = r2_score(y_test, y_pred)
+overfitting_gap = train_accuracy - test_accuracy
 
-print(f"Final Test Accuracy: {test_accuracy:.4f}")
+print(f"Training Accuracy: {train_accuracy:.4f}")
+print(f"Test Accuracy: {test_accuracy:.4f}")
+print(f"Overfitting Gap: {overfitting_gap:.4f}")
 print(f"R2 Score: {r2:.4f}")
+
+# Check for overfitting
+if overfitting_gap > 0.1:
+    print("WARNING: Potential overfitting detected!")
+elif overfitting_gap > 0.05:
+    print("WARNING: Mild overfitting detected")
+else:
+    print("OK: No significant overfitting")
 
 # Classification report
 print("\nClassification Report:")
@@ -223,10 +246,13 @@ joblib.dump(encoders, "feature_encoders.pkl")
 # Save model metadata
 model_metadata = {
     'model_name': best_model_name,
+    'train_accuracy': train_accuracy,
     'test_accuracy': test_accuracy,
+    'overfitting_gap': overfitting_gap,
     'r2_score': r2,
     'feature_columns': list(X.columns),
-    'target_column': 'Estimated Popularity (Now or Soon)'
+    'target_column': 'Estimated Popularity (Now or Soon)',
+    'no_leakage': True
 }
 joblib.dump(model_metadata, "model_metadata.pkl")
 
@@ -236,5 +262,7 @@ print(f"Model metadata saved as 'model_metadata.pkl'")
 
 print(f"\nModel training completed successfully!")
 print(f"Best Model: {best_model_name}")
+print(f"Training Accuracy: {train_accuracy:.4f}")
 print(f"Test Accuracy: {test_accuracy:.4f}")
+print(f"Overfitting Gap: {overfitting_gap:.4f}")
 print(f"R2 Score: {r2:.4f}")

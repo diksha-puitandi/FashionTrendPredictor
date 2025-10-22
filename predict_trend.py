@@ -112,59 +112,8 @@ def predict_trend(input_data):
         }
         df['Where Did You First See This?'] = first_seen_mapping.get(input_data['first_seen'], input_data['first_seen'])
         
-        # Add engineered features (category and estimated years)
-        # We need to predict these based on the input
-        # For now, we'll use a simple mapping based on the input features
-        
-        # Create a simple category prediction based on input features
-        # This is a simplified approach - in practice, you might want to train a separate model
-        category_score = 0
-        
-        # Age factor
-        if input_data['age'] == 'under_18':
-            category_score += 1
-        elif input_data['age'] == '18_to_25':
-            category_score += 3
-        elif input_data['age'] == '25_to_30':
-            category_score += 4
-        else:
-            category_score += 2
-        
-        # Boldness factor
-        boldness = input_data['boldness']
-        if boldness >= 8:
-            category_score += 2
-        elif boldness >= 6:
-            category_score += 1
-        elif boldness <= 3:
-            category_score -= 1
-        
-        # Celebrity promotion factor
-        if input_data['celebrity_promotion'] == 'yes':
-            category_score += 2
-        elif input_data['celebrity_promotion'] == 'not_sure':
-            category_score += 1
-        
-        # Determine category based on score
-        if category_score <= 2:
-            category = 'Very Low'
-            estimated_years = '0-1'
-        elif category_score <= 4:
-            category = 'Low'
-            estimated_years = '2-3'
-        elif category_score <= 6:
-            category = 'Medium'
-            estimated_years = '5'
-        elif category_score <= 8:
-            category = 'High'
-            estimated_years = '6-7'
-        else:
-            category = 'Very High'
-            estimated_years = '9-10'
-        
-        # Add engineered features
-        df['category'] = category
-        df['Estimated Years'] = estimated_years
+        # Note: We no longer add engineered features to avoid data leakage
+        # The model now works with only the original input features
         
         # Encode categorical features using the same encoders from training
         df_encoded = df.copy()
@@ -184,8 +133,11 @@ def predict_trend(input_data):
         
         # Get model metadata
         model_name = metadata.get('model_name', 'Unknown')
+        train_accuracy = metadata.get('train_accuracy', 0.0)
         test_accuracy = metadata.get('test_accuracy', 0.0)
+        overfitting_gap = metadata.get('overfitting_gap', 0.0)
         r2_score = metadata.get('r2_score', 0.0)
+        no_leakage = metadata.get('no_leakage', False)
         
         # Create trend series for visualization
         trend_series = {
@@ -198,6 +150,13 @@ def predict_trend(input_data):
         prediction_multiplier = prediction / 3.0  # Normalize to 0-1.67 range
         trend_series["values"] = [int(val * prediction_multiplier) for val in base_trend]
         
+        # Create category and estimated years based on prediction
+        category_mapping = {1: "Very Low", 2: "Low", 3: "Medium", 4: "High", 5: "Very High"}
+        years_mapping = {1: "0-1", 2: "2-3", 3: "5", 4: "6-7", 5: "9-10"}
+        
+        category = category_mapping.get(prediction, "Unknown")
+        estimated_years = years_mapping.get(prediction, "Unknown")
+        
         result = {
             "success": True,
             "prediction": int(prediction),
@@ -206,8 +165,11 @@ def predict_trend(input_data):
             "estimated_years": estimated_years,
             "model_info": {
                 "model_name": model_name,
-                "accuracy": round(test_accuracy, 4),
-                "r2_score": round(r2_score, 4)
+                "train_accuracy": round(train_accuracy, 4),
+                "test_accuracy": round(test_accuracy, 4),
+                "overfitting_gap": round(overfitting_gap, 4),
+                "r2_score": round(r2_score, 4),
+                "no_leakage": no_leakage
             },
             "trend_series": trend_series,
             "confidence": float(max(prediction_proba)) if prediction_proba is not None else 0.0

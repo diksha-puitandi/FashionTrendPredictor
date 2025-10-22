@@ -749,7 +749,7 @@ footer {
                     </div>
                     
                     <div class="form-buttons">
-                        <button type="submit" class="cta-button">Predict Trend</button>
+                    <button type="submit" class="cta-button">Predict Trend</button>
                         <button type="button" class="reset-button" onclick="resetForm()">Reset</button>
                     </div>
                 </form>
@@ -808,12 +808,32 @@ document.getElementById('predictionForm').addEventListener('submit', function(e)
         if (data.success) {
             // Show prediction results in alert dialog
             const modelInfo = data.model_info || {};
-            const accuracy = modelInfo.accuracy || 0;
+            const trainAccuracy = modelInfo.train_accuracy || 0;
+            const testAccuracy = modelInfo.test_accuracy || 0;
+            const overfittingGap = modelInfo.overfitting_gap || 0;
             const r2Score = modelInfo.r2_score || 0;
+            const noLeakage = modelInfo.no_leakage || false;
             const prediction = data.prediction || 0;
             const category = data.category || 'Unknown';
             const estimatedYears = data.estimated_years || 'Unknown';
             const confidence = data.confidence || 0;
+            
+            // Check if model is overfitted
+            const isOverfitted = overfittingGap > 0.1;
+            const isMildlyOverfitted = overfittingGap > 0.05 && overfittingGap <= 0.1;
+            
+            let overfittingWarning = '';
+            if (isOverfitted) {
+                overfittingWarning = `\n⚠️ WARNING: Model shows signs of overfitting!\n` +
+                    `Gap between training and test accuracy: ${(overfittingGap * 100).toFixed(1)}%\n`;
+            } else if (isMildlyOverfitted) {
+                overfittingWarning = `\n⚠️ WARNING: Model shows mild overfitting.\n` +
+                    `Gap between training and test accuracy: ${(overfittingGap * 100).toFixed(1)}%\n`;
+            }
+            
+            const modelStatus = isOverfitted ? 'OVERFITTED' : 
+                               isMildlyOverfitted ? 'MILD OVERFITTING' : 
+                               noLeakage ? 'NORMAL (No Data Leakage)' : 'NORMAL';
             
             const alertMessage = `🎯 FASHION TREND PREDICTION RESULTS 🎯\n\n` +
                 `📊 Predicted Popularity: ${prediction}/5\n` +
@@ -821,9 +841,13 @@ document.getElementById('predictionForm').addEventListener('submit', function(e)
                 `⏰ Estimated Years: ${estimatedYears}\n` +
                 `🎯 Confidence: ${(confidence * 100).toFixed(1)}%\n\n` +
                 `🤖 MODEL PERFORMANCE:\n` +
-                `📈 Accuracy: ${(accuracy * 100).toFixed(2)}%\n` +
+                `📈 Training Accuracy: ${(trainAccuracy * 100).toFixed(2)}%\n` +
+                `📊 Test Accuracy: ${(testAccuracy * 100).toFixed(2)}%\n` +
+                `📉 Overfitting Gap: ${(overfittingGap * 100).toFixed(2)}%\n` +
                 `📊 R² Score: ${r2Score.toFixed(4)}\n` +
-                `🔧 Model: ${modelInfo.model_name || 'Decision Tree'}\n\n` +
+                `🔧 Model: ${modelInfo.model_name || 'Decision Tree'}\n` +
+                `📊 Model Status: ${modelStatus}\n\n` +
+                overfittingWarning +
                 `✨ The trend prediction is based on your input and our trained machine learning model!`;
             
             alert(alertMessage);

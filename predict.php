@@ -49,27 +49,21 @@ $payload = json_encode([
     "first_seen" => $first_seen
 ]);
 
-$api_url = "http://127.0.0.1:5000/predict_trend"; // your ML API
-$ch = curl_init($api_url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: application/json"]);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $payload);
-curl_setopt($ch, CURLOPT_TIMEOUT, 30); // 30 second timeout
-$response = curl_exec($ch);
-$err = curl_error($ch);
-curl_close($ch);
+// Call Python prediction script
+$python_script = "predict_trend.py";
+$command = "python " . $python_script . " '" . addslashes($payload) . "' 2>&1";
+$response = shell_exec($command);
 
-if ($err || !$response) {
+if ($response === null) {
     http_response_code(500);
-    echo json_encode(["error" => "API call failed: $err"]);
+    echo json_encode(["error" => "Failed to execute prediction script"]);
     exit;
 }
 
 $api_result = json_decode($response, true);
 if (!$api_result) {
     http_response_code(500);
-    echo json_encode(["error" => "Invalid JSON from API"]);
+    echo json_encode(["error" => "Invalid response from prediction script: " . $response]);
     exit;
 }
 

@@ -805,11 +805,38 @@ document.getElementById('predictionForm').addEventListener('submit', function(e)
             return;
         }
 
-        // Ensure your ML API returns trend_series.labels and trend_series.values
-        const labels = data.trend_series?.labels || ['Jan','Feb','Mar','Apr','May','Jun'];
-        const values = data.trend_series?.values || [50, 65, 80, 75, 90, 85];
-
-        drawChart(labels, values, 'Fashion Trend');
+        if (data.success) {
+            // Show prediction results in alert dialog
+            const modelInfo = data.model_info || {};
+            const accuracy = modelInfo.accuracy || 0;
+            const r2Score = modelInfo.r2_score || 0;
+            const prediction = data.prediction || 0;
+            const category = data.category || 'Unknown';
+            const estimatedYears = data.estimated_years || 'Unknown';
+            const confidence = data.confidence || 0;
+            
+            const alertMessage = `🎯 FASHION TREND PREDICTION RESULTS 🎯\n\n` +
+                `📊 Predicted Popularity: ${prediction}/5\n` +
+                `🏷️ Category: ${category}\n` +
+                `⏰ Estimated Years: ${estimatedYears}\n` +
+                `🎯 Confidence: ${(confidence * 100).toFixed(1)}%\n\n` +
+                `🤖 MODEL PERFORMANCE:\n` +
+                `📈 Accuracy: ${(accuracy * 100).toFixed(2)}%\n` +
+                `📊 R² Score: ${r2Score.toFixed(4)}\n` +
+                `🔧 Model: ${modelInfo.model_name || 'Decision Tree'}\n\n` +
+                `✨ The trend prediction is based on your input and our trained machine learning model!`;
+            
+            alert(alertMessage);
+            
+            // Draw chart
+            if (data.trend_series) {
+                const labels = data.trend_series.labels || ['Jan','Feb','Mar','Apr','May','Jun'];
+                const values = data.trend_series.values || [50, 65, 80, 75, 90, 85];
+                drawChart(labels, values, 'Fashion Trend');
+            }
+        } else {
+            alert('Prediction failed: ' + (data.error || 'Unknown error'));
+        }
     })
     .catch(err => {
         console.error(err);

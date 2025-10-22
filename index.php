@@ -6,7 +6,8 @@ header("Cache-Control: no-cache, no-store, must-revalidate");
 header("Pragma: no-cache");
 header("Expires: 0");
 
-if (!isset($_SESSION['username'])) {
+// Check if user is logged in with user_id validation
+if (!isset($_SESSION['username']) || !isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit;
 }
@@ -54,11 +55,21 @@ body {
     z-index: 1000;
 }
 
-.navbar .logo {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: var(--primary-color);
-}
+        .navbar .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .navbar .logo a {
+            text-decoration: none;
+            color: inherit;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .logo a:hover {
+            color: var(--secondary-color);
+        }
 
 .nav-links {
     list-style: none;
@@ -1285,13 +1296,13 @@ footer {
 
     <header>
         <nav class="navbar">
-            <div class="logo">Fashion Predictor</div>
+            <div class="logo"><a href="index.php">Fashion Predictor</a></div>
             <ul class="nav-links">
             <!-- <a href="log in.html">Log In</a> -->
 
                 <li><a href="index.php" class="active">Home</a></li>
-                <li><a href="predict.html">Predict Trend</a></li>
-                <li><a href="insights.html">Dataset Insights</a></li>
+                <li><a href="predict.php">Predict Trend</a></li>
+                <li><a href="insights.php">Dataset Insights</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropbtn">More <i class="fas fa-caret-down"></i></a>
                     <div class="dropdown-content">
@@ -1300,7 +1311,7 @@ footer {
                         <a href="#contact">Contact</a>
                     </div>
                 </li>
-                         <?php if (isset($_SESSION['username'])): ?>
+                <?php if (isset($_SESSION['username']) && isset($_SESSION['user_id'])): ?>
         <li><a href="logout.php">Logout</a></li>
     <?php else: ?>
                     <li><a href="login.php">Login</a></li>
@@ -1329,7 +1340,7 @@ footer {
                         <span class="stat-label">Data Points</span>
                     </div>
                 </div>
-                <a href="predict.html" class="cta-button">Start Predicting <i class="fas fa-arrow-right"></i></a>
+                        <a href="predict.php" class="cta-button">Start Predicting <i class="fas fa-arrow-right"></i></a>
             </div>
             <div class="hero-image-container">
                 <div class="fashion-trend-visual">
@@ -1544,8 +1555,8 @@ footer {
                     <h2>Ready to Predict the Next Big Fashion Trend?</h2>
                     <p>Join thousands of fashion enthusiasts, designers, and retailers who trust our AI-powered predictions.</p>
                     <div class="cta-buttons">
-                        <a href="predict.html" class="cta-button primary">Start Predicting Now</a>
-                        <a href="insights.html" class="cta-button secondary">View Dataset Insights</a>
+                        <a href="predict.php" class="cta-button primary">Start Predicting Now</a>
+                        <a href="insights.php" class="cta-button secondary">View Dataset Insights</a>
                     </div>
                 </div>
             </div>

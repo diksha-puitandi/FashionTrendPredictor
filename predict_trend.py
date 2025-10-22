@@ -198,7 +198,7 @@ def predict_trend(input_data):
 
 if __name__ == "__main__":
     try:
-        # Get input data from command line argument
+        # Get input data from file or command line argument
         if len(sys.argv) < 2:
             error_result = {
                 "success": False,
@@ -207,14 +207,22 @@ if __name__ == "__main__":
             print(json.dumps(error_result))
             sys.exit(1)
             
-        input_json = sys.argv[1]
-        # Clean the input JSON string
-        input_json = input_json.strip()
-        # Remove surrounding quotes if present
-        if input_json.startswith('"') and input_json.endswith('"'):
-            input_json = input_json[1:-1]
-        if input_json.startswith("'") and input_json.endswith("'"):
-            input_json = input_json[1:-1]
+        input_source = sys.argv[1]
+        
+        # Check if it's a file path or direct JSON
+        if input_source.endswith('.json') or '/' in input_source or '\\' in input_source:
+            # It's a file path
+            with open(input_source, 'r') as f:
+                input_json = f.read().strip()
+        else:
+            # It's direct JSON from command line
+            input_json = input_source.strip()
+            # Remove surrounding quotes if present
+            if input_json.startswith('"') and input_json.endswith('"'):
+                input_json = input_json[1:-1]
+            if input_json.startswith("'") and input_json.endswith("'"):
+                input_json = input_json[1:-1]
+            
         input_data = json.loads(input_json)
         
         # Make prediction

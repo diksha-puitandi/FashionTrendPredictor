@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Clear all session variables
+// Clear all session variables including user_id
 $_SESSION = array();
 
 // Destroy the session cookie

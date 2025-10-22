@@ -25,6 +25,7 @@ if ($conn->connect_error) {
 }
 
 $error = "";
+$expired = isset($_GET['expired']) ? "Your session has expired. Please log in again." : "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST['username']);
@@ -41,6 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($password === $row['password']) {
             // Login successful
             $_SESSION['username'] = $username;
+            $_SESSION['user_id'] = $row['user_id']; // Store user_id in session
+            $_SESSION['login_time'] = time(); // Store login time for additional security
             header("Location: index.php");
             exit;
         } else {
@@ -630,6 +633,7 @@ $conn->close();
 
                     <p class="login-description">Welcome back! Please log in to your account.</p>
                     <?php if ($error) echo "<p class='error'>$error</p>"; ?>
+                    <?php if ($expired) echo "<p class='error'>$expired</p>"; ?>
                     <form class="login-form" action="" method="POST">
                         <div class="form-group">
                             <label for="username">Username or Email:</label>

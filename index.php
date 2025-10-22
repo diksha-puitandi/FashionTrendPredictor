@@ -69,7 +69,7 @@ body {
 
         .navbar .logo a:hover {
             color: var(--secondary-color);
-        }
+}
 
 .nav-links {
     list-style: none;
@@ -1313,10 +1313,10 @@ footer {
                 </li>
                 <?php if (isset($_SESSION['username']) && isset($_SESSION['user_id'])): ?>
                 <li><a href="profile.php">Profile</a></li>
-                <li><a href="logout.php">Logout</a></li>
-            <?php else: ?>
+        <li><a href="logout.php">Logout</a></li>
+    <?php else: ?>
                 <li><a href="login.php">Login</a></li>
-            <?php endif; ?>
+    <?php endif; ?>
             </ul>
         </nav>
     </header>

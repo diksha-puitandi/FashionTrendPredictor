@@ -48,7 +48,7 @@ try {
     }
 
     // First, verify the current password
-    $stmt = $conn->prepare("SELECT password FROM users WHERE user_id = ? AND username = ?");
+    $stmt = $conn->prepare("SELECT password FROM user WHERE user_id = ? AND username = ?");
     $stmt->bind_param("is", $user_id, $username);
     $stmt->execute();
     $result = $stmt->get_result();
@@ -67,14 +67,14 @@ try {
     }
     
     // Update the user's name
-    // First, check if we need to add a 'name' column to the users table
-    $checkColumn = $conn->query("SHOW COLUMNS FROM users LIKE 'name'");
+    // First, check if we need to add a 'name' column to the user table
+    $checkColumn = $conn->query("SHOW COLUMNS FROM user LIKE 'name'");
     if ($checkColumn->num_rows === 0) {
         // Add name column if it doesn't exist
-        $conn->query("ALTER TABLE users ADD COLUMN name VARCHAR(50) DEFAULT ''");
+        $conn->query("ALTER TABLE user ADD COLUMN name VARCHAR(50) DEFAULT ''");
     }
     
-    $updateStmt = $conn->prepare("UPDATE users SET name = ? WHERE user_id = ? AND username = ?");
+    $updateStmt = $conn->prepare("UPDATE user SET name = ? WHERE user_id = ? AND username = ?");
     $updateStmt->bind_param("sis", $newName, $user_id, $username);
     
     if ($updateStmt->execute()) {

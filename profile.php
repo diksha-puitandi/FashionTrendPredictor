@@ -37,12 +37,12 @@ try {
     }
     
     // Check if name column exists, if not create it
-    $checkColumn = $conn->query("SHOW COLUMNS FROM users LIKE 'name'");
+    $checkColumn = $conn->query("SHOW COLUMNS FROM user LIKE 'name'");
     if ($checkColumn->num_rows === 0) {
-        $conn->query("ALTER TABLE users ADD COLUMN name VARCHAR(50) DEFAULT ''");
+        $conn->query("ALTER TABLE user ADD COLUMN name VARCHAR(50) DEFAULT ''");
     }
     
-    $stmt = $conn->prepare("SELECT name FROM users WHERE user_id = ? AND username = ?");
+    $stmt = $conn->prepare("SELECT name FROM user WHERE user_id = ? AND username = ?");
     $stmt->bind_param("is", $user_id, $username);
     $stmt->execute();
     $result = $stmt->get_result();

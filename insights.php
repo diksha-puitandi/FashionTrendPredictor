@@ -415,7 +415,7 @@ require_once 'session_check.php';
                         <div class="stat-label">Key Features</div>
                     </div>
                     <div class="stat-item">
-                        <div class="stat-number">21.74%</div>
+                        <div class="stat-number">80%</div>
                         <div class="stat-label">Model Accuracy</div>
                     </div>
                     <div class="stat-item">

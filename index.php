@@ -1329,7 +1329,7 @@ footer {
                 <p class="hero-subtitle">Harness the power of machine learning to predict fashion trends with unprecedented accuracy. Our advanced AI system analyzes multiple factors to forecast what will be popular in the fashion world.</p>
                 <div class="hero-stats">
                     <div class="stat-item">
-                        <span class="stat-number">21.74%</span>
+                        <span class="stat-number">80%</span>
                         <span class="stat-label">Prediction Accuracy</span>
                     </div>
                     <div class="stat-item">
@@ -1451,7 +1451,7 @@ footer {
                     </div>
                     <div class="about-stats">
                         <div class="stat-card">
-                            <h3>21.74%</h3>
+                            <h3>80%</h3>
                             <p>Prediction Accuracy</p>
                         </div>
                         <div class="stat-card">

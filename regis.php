@@ -42,6 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($stmt->execute()) {
                 $_SESSION['username'] = $username;
+                $_SESSION['user_id'] = $conn->insert_id; // Get the auto-generated user_id
+                $_SESSION['login_time'] = time(); // Set login time for session timeout
                 header("Location: index.php");
                 exit;
             } else {

@@ -418,7 +418,7 @@ require_once 'session_check.php';
                 <div class="result-card">
                     <h3>Model Accuracy</h3>
                     <div class="result-value accuracy-value" id="accuracyValue">0%</div>
-                    <p>Prediction Accuracy</p>
+                    <p>Model Accuracy</p>
                 </div>
 
                 <div class="result-card">
@@ -449,7 +449,7 @@ require_once 'session_check.php';
                         <p id="estimatedYears">Loading...</p>
                     </div>
                     <div class="model-detail">
-                        <h4>R² Score</h4>
+                        <h4>R² Score (0-1)</h4>
                         <p id="r2Score">Loading...</p>
                     </div>
                     <div class="model-detail">
@@ -511,7 +511,7 @@ require_once 'session_check.php';
             document.getElementById('category').textContent = category;
             document.getElementById('estimatedYears').textContent = estimatedYears;
             document.getElementById('modelType').textContent = modelType;
-            document.getElementById('r2Score').textContent = (parseFloat(r2Score) * 100).toFixed(1) + '%';
+            document.getElementById('r2Score').textContent = parseFloat(r2Score).toFixed(3);
             document.getElementById('dataSize').textContent = dataSize;
             document.getElementById('featuresCount').textContent = featuresCount;
 
